@@ -14,6 +14,8 @@ env:
 install:
   - pip install pipenv
   - pipenv sync -d
+  - cp contrib/env-sample .env
+  - pip install -q -r requirements-dev.txt codecov
 
 
 script:
