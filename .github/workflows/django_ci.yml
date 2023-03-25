@@ -1,44 +1,13 @@
-name: Python application
-
-on: [pull_request]
-
+name: learn-github-actions
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
 jobs:
-  build:
-    env:
-      PIPENV_NO_INHERIT: 1
-      PIPENV_IGNORE_VIRTUALENVS: 1
+  check-bats-version:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:11.5
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports: ['5432:5432']
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.11
-    - name: Copying configurations
-      run: |
-        cp contrib/env-sample .env
-    - name: Install dependencies
-      run: |
-        pip install pipenv
-        pipenv sync --dev
-    - name: Lint with flake8
-      run: |
-        pipenv run flake8 .
-    - name: Test with pytest
-      run: |
-        pipenv run pytest --cov=pypro
-    - name: Posting Coverage
-      env:
-        CODECOV_TOKEN: "00c85495-bdd1-4eab-b07f-1a5bb38a9440"
-      run: |
-        pipenv run codecov
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm install -g bats
+      - run: bats -v
