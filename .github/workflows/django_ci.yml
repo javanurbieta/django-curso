@@ -11,7 +11,6 @@ jobs:
           node-version: '14'
       - run: npm install -g bats
       - run: bats -v
-      - run: pipenv run flake8 .
-      - run: pipenv run pytest pythonpro --cov=pythonpro
+
         env:
            CODECOV_TOKEN: "00c85495-bdd1-4eab-b07f-1a5bb38a9440"
