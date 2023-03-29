@@ -5,6 +5,12 @@ sudo: true
 python:
   - 3.11
 
+services:
+  - postgresql
+
+addons:
+  postgresql:  '9.5'
+
 env:
   global:
     - PIPENV_VENV_IN_PROJECT=1
@@ -16,6 +22,9 @@ install:
   - pipenv sync -d
   - cp contrib/env-sample .env
   - pip install -q -r requirements-dev.txt codecov
+
+before_script:
+  - psql -C "CREATE DATABASE testdb;" -U postgres
 
 
 script:
