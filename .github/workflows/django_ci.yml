@@ -1,21 +1,22 @@
-name: ci
+name: CI
 
 on:
   pull_request:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
     env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PIPENV_NO_INHERIT: 1
       PIPENV_IGNORE_VIRTUALENVS: 1
     runs-on: ubuntu-latest
 
     services:
       postgres:
-        image: postgres:11.5
+        image: postgres:12
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -27,7 +28,9 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: 3.11
+          architecture: x64
+          cache: 'pip'
       - name: Copying configurations
         run: |
           cp contrib/env-sample .env
@@ -35,17 +38,15 @@ jobs:
         run: |
           pip install pipenv
           pipenv sync --dev
-      - name: Lint with flake8
-        run: |
-          pipenv run flake8 .
-      - name: Test with pytest
+      - name: Rodar flake8
+        uses: py-actions/flake8@v1
+        with:
+          checkname: 'flake8_py3'
+      - name: Rodar Testes Automáticos
         run: |
           pipenv run pytest . --cov=.
-      - name: Posting Coverage
-        env:
-          CODECOV_TOKEN:00c85495-bdd1-4eab-b07f-1a5bb38a9440
-        run: |
-          pipenv run codecov
-        
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
 
 
