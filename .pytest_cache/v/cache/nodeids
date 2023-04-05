@@ -1,3 +1,4 @@
 [
-  "pypro/base/tests/test_home.py::test_status_code"
+  "pypro/base/tests/test_home.py::test_status_code",
+  "test_codecov.py::test_relatório"
 ]
