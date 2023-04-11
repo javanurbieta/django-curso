@@ -1,9 +1,9 @@
-name: ci
+name: CI
 
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:11.5
+        image: postgres:12
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -28,7 +28,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.11.2
+          python-version: 3.11
           architecture: x64
           cache: 'pip'
       - name: Copiar Configurações .env
@@ -51,9 +51,5 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           pipenv run codecov
-#      - name: Upload coverage reports to Codecov
-#        uses: codecov/codecov-action@v3
-#        with:
-#          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
 
 
